@@ -1,8 +1,14 @@
 <template>
   <div  ref="container" 
-        class="flow-container" 
+        class="flow-container"
         @mousewheel="onWheel"
-        :style="{width:((100/scale)+'%'),height:((100/scale)+'%'),transform: 'scale('+scale+')'}">
+        :style="{
+          width:((100/scale)+'%'),
+          height:((100/scale)+'%'),
+          transform: 'scale('+scale+')',
+          top: top,
+          left: left
+        }">
         <template v-for="item in edges">
           <component 
             :is="item.type" 
@@ -25,8 +31,6 @@
 
 <style lang="scss">
   .flow-container { 
-    top: 0px;
-    left: 0px;
     transform-origin : top left;
     overflow:auto;
     position:relative;
@@ -54,6 +58,8 @@ export default {
   },
   data () {
     return {
+      top: 0,
+      left: 0,
       scale: 1.0,
       nodes: [
         {
