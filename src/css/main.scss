@@ -1,0 +1,15 @@
+@import 'theme';
+
+html {
+  height: 100%;
+}
+
+body {
+  //background-color: #272727;
+  font-family: -apple-system, BlinkMacSystemFont,"Ubuntu", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  /*font-family: "Trebuchet MS", Verdana, Geneva, Arial;*/
+  font-size: 95%;
+  color: $primary-font-color;
+  height: 100%;   
+  margin: 0
+}
