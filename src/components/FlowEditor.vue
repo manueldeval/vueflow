@@ -58,18 +58,18 @@ export default {
         {
           id: 'Node1',
           type: 'connect-box',
-          top : 10,
           left : 50,
+          top : 10
         },{
           id: 'Node2',
           type: 'connect-box',
-          top : 200,
-          left : 300
+          left : 300,
+          top : 200
         },{
           id: 'Node3',
           type: 'connect-box',
-          top : 200,
-          left : 20
+          left : 20,
+          top : 200
         }
       ],
       edges: [
@@ -95,11 +95,8 @@ export default {
     onWheel: function(e){
       console.log(e)
     },
-    resize: function(){
-      console.log("RESIZED!")
-    },
-    positionChanged: function(box){
-      this.changeNodePosition(box.id,box._getBoxPosition().y,box._getBoxPosition().x)
+    positionChanged: function(box,offsetX,offsetY){
+      this.changeNodePosition(box.id,offsetX,offsetY)
       this.changeEdgesPosition(box)
     },
     changeEdgesPosition: function(box){
@@ -118,10 +115,10 @@ export default {
         edge.dst.direction = connectorPosition.direction
       })
     },
-    changeNodePosition: function(id,top,left){
+    changeNodePosition: function(id,ox,oy){
       let node = this.nodes.find(n => n.id == id)
-      node.top = top
-      node.left = left
+      node.top = node.top + oy
+      node.left = node.left + ox
     }
   }
 }
