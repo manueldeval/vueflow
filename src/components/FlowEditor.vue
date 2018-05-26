@@ -1,6 +1,8 @@
 <template>
-  <div ref="container" class="flow-container" @mousewheel="onWheel">
-
+  <div  ref="container" 
+        class="flow-container" 
+        @mousewheel="onWheel"
+        :style="{width:((100/scale)+'%'),height:((100/scale)+'%'),transform: 'scale('+scale+')'}">
         <template v-for="item in edges">
           <component 
             :is="item.type" 
@@ -22,17 +24,15 @@
 </template>
 
 <style lang="scss">
-  $scale: 1;
   .flow-container { 
     top: 0px;
     left: 0px;
-    transform: scale($scale) ;
     transform-origin : top left;
-    //background-color: slategrey;
     overflow:auto;
     position:relative;
-    height: 200%/$scale;
-    width: 100%/$scale;
+    background-image:       linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, .05) 25%, rgba(255, 255, 255, .05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .05) 75%, rgba(255, 255, 255, .05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, .05) 25%, rgba(255, 255, 255, .05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .05) 75%, rgba(255, 255, 255, .05) 76%, transparent 77%, transparent);
+    height:100%;
+    background-size:50px 50px;
   }
 </style>
 
@@ -54,6 +54,7 @@ export default {
   },
   data () {
     return {
+      scale: 1.0,
       nodes: [
         {
           id: 'Node1',
@@ -93,7 +94,12 @@ export default {
   },
   methods: {
     onWheel: function(e){
-      console.log(e)
+      let ratio = e.deltaY>0?-0.05:0.05;
+      let newScale = this.scale+ ratio
+      if (newScale > 0 && newScale <= 1) {
+        this.scale = newScale
+      }
+      
     },
     positionChanged: function(box,offsetX,offsetY){
       this.changeNodePosition(box.id,offsetX,offsetY)
@@ -117,8 +123,8 @@ export default {
     },
     changeNodePosition: function(id,ox,oy){
       let node = this.nodes.find(n => n.id == id)
-      node.top = node.top + oy
-      node.left = node.left + ox
+      node.top = node.top + (oy / this.scale)
+      node.left = node.left + (ox / this.scale)
     }
   }
 }
