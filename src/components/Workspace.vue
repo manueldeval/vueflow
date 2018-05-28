@@ -9,7 +9,7 @@
       <div id="sidebar" ref="sidebar">
         <slot name="sidebar">Fichier</slot>
       </div>
-      <div id="drag"    v-dragged="onDragged"></div>
+      <div id="drag" v-dragit="onDragged"></div>
       <div id="editor">
         <slot name="editor">Editor</slot>
       </div>

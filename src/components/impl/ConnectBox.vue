@@ -12,7 +12,7 @@
           </template>
         </template>
       <div style="margin:0px">
-          <div class="header" v-dragged="onDragged">
+          <div class="header" v-dragit="onDragged">
             {{id}}
             <icon name="arrows-alt" scale="0.7" style="float:right;padding:4px"></icon>
           </div>

@@ -6,7 +6,7 @@
       <span       slot="header" ><img src="./assets/brain.png" style="with:35px;height:35px"/></span>
       <span       slot="sidebar">sidebar</span>
       <flow-editor slot="editor"></flow-editor>
-      <span       slot="footer" >Mon footer</span>     
+      <span slot="footer" >Mon footer</span>     
     </Workspace>
   </div>
 </template>
@@ -14,7 +14,6 @@
 <script>
 import Workspace from "./components/Workspace" 
 import FlowEditor from "./components/FlowEditor" 
-
 export default {
   name: 'app',
   components: {

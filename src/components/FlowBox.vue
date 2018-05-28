@@ -3,7 +3,7 @@
       class="box"
       ref="box"
       :style="{top:(top+'px'),left:(left+'px')}"
-      v-dragged="onDragged">{{id}} - {{ top }}/ {{ left }}
+      v-dragit="onDragged">{{id}} - {{ top }}/ {{ left }}
     </div> 
 </template>
 
@@ -44,10 +44,6 @@ export default {
       beforeDragPosition: {x:0,y:0},
     }
   },
-  mounted: function(){   
-    //this._setBoxPosition(this.left,this.top)
-    this.$emit('dragged',this,0,0)
-  },
   methods: {
     getOutputConnectorPosition : function(connectorName) {
       return { x: this.left, y: this.top , direction: "up" }
@@ -55,11 +51,13 @@ export default {
     getInputConnectorPosition : function(connectorName) {
       return { x: this.left, y: this.top , direction: "up" }
     },
-    onDragged({ el, deltaX, deltaY, offsetX, offsetY, clientX, clientY, first, last }) {
+    onDragged(e) {
+      let { el, deltaX, deltaY, offsetX, offsetY, clientX, clientY, first, last } = e
+      //console.log(e)
       if (first || last) 
-        this.$emit('dragged',this,0,0)
+        this.$emit('dragged',this.id,0,0)
       else
-        this.$emit('dragged',this,deltaX,deltaY)
+        this.$emit('dragged',this.id,deltaX,deltaY)
     }
   }
 }
