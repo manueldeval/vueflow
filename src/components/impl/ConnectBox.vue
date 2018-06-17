@@ -83,4 +83,9 @@
     border-radius: 5px;
     user-select: none;
   }
+  .box:hover {
+    border-color: #007ACC;
+    border-width: 1px;
+    border-style: solid
+  }
 </style>

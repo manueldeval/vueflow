@@ -1,5 +1,6 @@
 <template>
   <svg  ref="svg" 
+        id="svg"
         :style="{top:connector.y,left:connector.x,position:'absolute'}"
         :width="connector.width"
         :height="connector.height"
@@ -15,6 +16,9 @@
     stroke-width:2;
     fill-opacity:0;
   }
+  #svg {
+    z-index: -1000
+  }
 </style>
 
 <script>
@@ -24,14 +28,14 @@ export default {
       type: String,
       default: ""
     },
-    src: {
+    from: {
       type: Object,
-      default :  { x: 30,   y: 30,   direction: "down" }
+      //The object is {node: "Node1" , output: "out2"}
     },
-    dst: {
+    to:{
       type: Object,
-      default :  { x: 200,   y: 200,   direction: "up" }
-    },
+      //The object is {node: "Node2" , input: "in2"}
+    }
   },
   methods:{
     _directionToSvgDirection: function(direction){
@@ -97,26 +101,32 @@ export default {
             min: {x: Math.min.apply(0, xvalues), y: Math.min.apply(0, yvalues)},
             max: {x: Math.max.apply(0, xvalues), y: Math.max.apply(0, yvalues)}
         };
-    }
+    },
+    findBoxByName: function(name){
+      return this.$parent.$refs[name][0]
+    },
   },
   computed: {
     connector : function(){
+      let src =  this.findBoxByName(this.from.node).getOutputConnectorPosition(this.from.output)
+      let dst =  this.findBoxByName(this.to.node).getInputConnectorPosition(this.to.input)
+
       let border = 5
 
-      let v1 = this._directionToSvgDirection(this.src.direction)
-      let v2 = this._directionToSvgDirection(this.dst.direction)
+      let v1 = this._directionToSvgDirection(src.direction)
+      let v2 = this._directionToSvgDirection(dst.direction)
 
       let bezierBox = this.bezierMinMax(
-                this.src.x,this.src.y,
-                this.src.x + v1.x, this.src.y + v1.y,
-                (this.dst.x+v2.x),(this.dst.y+v2.y),
-                this.dst.x,this.dst.y)
+                src.x,src.y,
+                src.x + v1.x, src.y + v1.y,
+                (dst.x+v2.x),(dst.y+v2.y),
+                dst.x,dst.y)
       return {
         x : bezierBox.min.x - border,
         y : bezierBox.min.y - border,
         width: bezierBox.max.x - bezierBox.min.x + 2*border,
         height: bezierBox.max.y - bezierBox.min.y + 2*border,
-        path:"M"+this.src.x+","+this.src.y+" C"+(v1.x+this.src.x)+","+(v1.y+this.src.y)+" "+(this.dst.x+v2.x)+","+(this.dst.y+v2.y)+" "+(this.dst.x)+","+(this.dst.y)
+        path:"M"+src.x+","+src.y+" C"+(v1.x+src.x)+","+(v1.y+src.y)+" "+(dst.x+v2.x)+","+(dst.y+v2.y)+" "+(dst.x)+","+(dst.y)
       }
     }
   }

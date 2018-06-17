@@ -10,13 +10,6 @@
           top: top +'px',
           left: left +'px'
         }">
-        <template v-for="item in edges">
-          <component 
-            :is="item.type" 
-            :key="item.id" 
-            v-bind="item">
-          </component>
-        </template>
 
         <template v-for="item in nodes">
           <component 
@@ -27,6 +20,14 @@
             @dragged="positionChanged">
           </component>
         </template> 
+
+        <template v-for="item in edges">
+          <component 
+            :is="item.type" 
+            :key="item.id" 
+            v-bind="item">
+          </component>
+        </template>
   </div>
 
 </template>
@@ -64,50 +65,34 @@ export default {
     FlowConnector,
     ConnectBox
   },
+  props: {
+    edges: {
+      type: Array,
+      default:[]
+      //The object is {node: "Node1" , output: "out2"}
+    },
+    nodes:{
+      type: Array,
+      default:[]
+      //The object is { id: "edge1", type: "flow-connector", from: {node: "Node1" , output: "out2"}, to:   {node: "Node2" , input: "in2"}},
+    }
+  },
   data () {
     return {
       top: 0,
       left: 0,
-      scale: 1.0,
-      nodes: [
-        {
-          id: 'Node1',
-          type: 'connect-box',
-          left : 50,
-          top : 10
-        },{
-          id: 'Node2',
-          type: 'connect-box',
-          left : 300,
-          top : 200
-        },{
-          id: 'Node3',
-          type: 'connect-box',
-          left : 20,
-          top : 200
-        }
-      ],
-      edges: [
-        {
-          id: "edge1",
-          type: "flow-connector",
-          from: {node: "Node1" , output: "out2"},
-          to:   {node: "Node2" , input: "in2"},
-          src: { x:10 ,  y:20, direction:"right"},
-          dst: { x:500 , y:100, direction:"left"}
-        },{
-          id: "edge2",
-          type: "flow-connector",
-          from: {node: "Node1" , output: "out1"},
-          to:   {node: "Node3" , input: "in1"},
-          src: { x:10 ,  y:20, direction:"right"},
-          dst: { x:50 , y:10, direction:"left"}
-        }
-      ]
+      scale: 1.0
     }
   },
-  mounted: function(){
-    this.updateAllPositions();
+  mounted() {
+    console.log("Hello")
+    // Uggly hack to force re-render...
+    this.nodeNames().forEach((nodeId) => {
+      this.positionChanged(nodeId,0,1)
+      this.$nextTick(() => {
+        this.positionChanged(nodeId,0,-1)
+      })
+    })
   },
   methods: {
     onWheel: function(e){
@@ -117,50 +102,21 @@ export default {
         this.scale = newScale
       }
     },
-    updateAllPositions: function(){
-      this.nodeNames().forEach(id => {
-        this.positionChanged(id,0,0)
-      });
-    },
-    nodeElement: function(ref){
-      return this.$refs[ref][0]
-    },
     nodeNames: function(){
       return this.nodes.map(node => node.id)
     },
-    positionChanged: function(boxId,offsetX,offsetY){
-      this.changeNodePosition(boxId,offsetX,offsetY)
-      this.changeEdgesPosition(boxId)
-    },
-    changeEdgesPosition: function(boxId){
-      let box = this.nodeElement(boxId)
-      let srcEdges = this.edges.filter(edge => edge.from.node == box.id)
-      let dstEdges = this.edges.filter(edge => edge.to.node   == box.id)
-      srcEdges.forEach(edge => {
-        let connectorPosition = box.getOutputConnectorPosition(edge.from.output)  
-        edge.src.x = connectorPosition.x
-        edge.src.y = connectorPosition.y
-        edge.src.direction = connectorPosition.direction
-      })
-      dstEdges.forEach(edge => {
-        let connectorPosition = box.getInputConnectorPosition(edge.to.input)  
-        edge.dst.x = connectorPosition.x
-        edge.dst.y = connectorPosition.y
-        edge.dst.direction = connectorPosition.direction
-      })
-    },
-    changeNodePosition: function(id,ox,oy){
+    positionChanged: function(id,ox,oy){
       let node = this.nodes.find(n => n.id == id)
       node.top = node.top + (oy / this.scale)
       node.left = node.left + (ox / this.scale)
+      this.$emit('boxdragged',id,node.top,node.left)
     },
     onDragged: function(e){
       let {deltaX,deltaY,first,last} = e
       if (first || last) return
       this.nodeNames().forEach((nodeId) => {
-        this.changeNodePosition(nodeId,deltaX,deltaY)
+        this.positionChanged(nodeId,deltaX,deltaY)
       })
-      this.updateAllPositions()
     }
   }
 }
