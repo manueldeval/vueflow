@@ -1,13 +1,20 @@
 <template>
-  <svg  ref="svg" 
-        id="svg"
-        :style="{top:connector.y,left:connector.x,position:'absolute'}"
-        :width="connector.width"
-        :height="connector.height"
-        :viewBox="connector.x+' '+connector.y+' '+connector.width+' '+connector.height"
-        >
-    <path ref="path" :d="connector.path"/>
-  </svg>
+  <div :style="{display: 'inline-block',
+                top:connector.y +'px',
+                left:connector.x +'px',
+                position:'absolute',
+                width:connector.width,
+                height:connector.height,
+                zIndex: -100}">
+    <svg  ref="svg" 
+          id="svg"
+          :width="connector.width"
+          :height="connector.height"
+          :viewBox="Math.round(connector.x)+' '+Math.round(connector.y)+' '+Math.round(connector.width)+' '+Math.round(connector.height)"
+          >
+      <path ref="path" :d="connector.path"/>
+    </svg>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -121,6 +128,7 @@ export default {
                 src.x + v1.x, src.y + v1.y,
                 (dst.x+v2.x),(dst.y+v2.y),
                 dst.x,dst.y)
+                console.log(bezierBox.min.x - border)
       return {
         x : bezierBox.min.x - border,
         y : bezierBox.min.y - border,
