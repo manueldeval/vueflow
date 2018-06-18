@@ -6,9 +6,7 @@
         :style="{
           width:((100/scale)+'%'),
           height:((100/scale)+'%'),
-          transform: 'scale('+scale+')',
-          top: top +'px',
-          left: left +'px'
+          transform: 'scale('+scale+')'
         }">
 
         <template v-for="item in nodes">
@@ -17,6 +15,8 @@
             :is="item.type" 
             :key="item.id" 
             v-bind="item"
+            :left="item.left+left"
+            :top="item.top+top"
             @dragged="positionChanged">
           </component>
         </template> 
@@ -114,9 +114,8 @@ export default {
     onDragged: function(e){
       let {deltaX,deltaY,first,last} = e
       if (first || last) return
-      this.nodeNames().forEach((nodeId) => {
-        this.positionChanged(nodeId,deltaX,deltaY)
-      })
+      this.top = this.top + deltaY
+      this.left = this.left + deltaX
     }
   }
 }
