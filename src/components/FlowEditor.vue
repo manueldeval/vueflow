@@ -6,7 +6,8 @@
         :style="{
           width:((100/scale)+'%'),
           height:((100/scale)+'%'),
-          transform: 'scale('+scale+')'
+          transform: 'scale('+scale+')',
+          backgroundPosition: left +'px '+top+'px'
         }">
 
         <template v-for="item in nodes">
@@ -114,8 +115,8 @@ export default {
     onDragged: function(e){
       let {deltaX,deltaY,first,last} = e
       if (first || last) return
-      this.top = this.top + deltaY
-      this.left = this.left + deltaX
+      this.top = this.top + deltaY / this.scale
+      this.left = this.left + deltaX / this.scale
     }
   }
 }
