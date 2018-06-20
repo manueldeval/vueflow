@@ -1,7 +1,7 @@
 <template>
   <div class="box" ref="box" :style="{top:(top+'px'),left:(left+'px')}">
         <template v-for="loc in ['up','down','left','right']">
-          <template v-for="(item, idx) in filterPlugDirection(loc)">
+          <template v-for="(item, idx) in filterSlotDirection(loc)">
             <component  :ref="item.id" 
                         :is="item.type" 
                         :key="item.id" 
@@ -20,31 +20,31 @@
   </div>
 </template>
 <script>
-  import FlowBox from '../FlowBox.vue';
-  import FlowPlug from '../FlowPlug.vue';
+  import FlowBox from './FlowBox.vue';
+  import FlowSlot from './FlowSlot.vue';
 
   export default {
     extends: FlowBox,
     props: {
-      plugs: {
+      slots: {
         type: Array,
         required: false,
         default: function(){
           return [
-            { id:'in1' , location:"up", direction:"in", type:"flow-plug" },
-            { id:'in2' , location:"up", direction:"in", type:"flow-plug" },
-            { id:'out1' , location:"down", direction:"out", type:"flow-plug" },
-            { id:'out2' , location:"down", direction:"out", type:"flow-plug" }
+            { id:'in1' , location:"up", direction:"in", type:"flow-slot" },
+            { id:'in2' , location:"up", direction:"in", type:"flow-slot" },
+            { id:'out1' , location:"down", direction:"out", type:"flow-slot" },
+            { id:'out2' , location:"down", direction:"out", type:"flow-slot" }
           ]
         }
       }
     },
     methods: {
-      filterPlugDirection(dir){
-        return this.plugs.filter(p => p.location === dir)
+      filterSlotDirection(dir){
+        return this.slots.filter(p => p.location === dir)
       },
       _getConnectorPosition: function(connectorName){
-        let definition = this.plugs.find(p => p.id==connectorName)
+        let definition = this.slots.find(p => p.id==connectorName)
         let direction = definition.location
         let x = this.left 
         let y = this.top 
@@ -60,7 +60,7 @@
       }
     },
     components: {
-      FlowPlug
+      FlowSlot
     }
   }
 </script>

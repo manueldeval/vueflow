@@ -55,7 +55,7 @@
 import FlowEditor from "./FlowEditor" 
 import FlowBox from "./FlowBox" 
 import FlowConnector from "./FlowConnector" 
-import ConnectBox from "./impl/ConnectBox" 
+import ConnectBox from "./ConnectBox" 
 
 
 export default {
@@ -86,7 +86,6 @@ export default {
     }
   },
   mounted() {
-    console.log("Hello")
     // Uggly hack to force re-render...
     this.nodeNames().forEach((nodeId) => {
       this.positionChanged(nodeId,0,1)

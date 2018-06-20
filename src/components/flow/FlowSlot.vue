@@ -1,5 +1,5 @@
 <template>
-  <div :class="['plug','plug-'+location]" :style="style"></div>
+  <div :class="['slot','slot-'+location]" :style="style"></div>
 </template>
 <script>
   export default {
@@ -31,7 +31,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .plug{
+  .slot{
     position: absolute;
     margin: 0px;
     padding: 0px;
@@ -41,17 +41,21 @@
     border-radius: 5px;
     background-color: #007ACC;
   }
-
-  .plug-left{
+  .slot:hover{
+    border-style: solid;
+    border-color: white;
+    border-width: 1px;
+  }
+  .slot-left{
     left: -5px;
   }
-  .plug-up{
+  .slot-up{
     top: -5px;
   }
-  .plug-down{
+  .slot-down{
     bottom: -5px;
   }
-  .plug-right{
+  .slot-right{
     right: -5px;
   }
 </style>

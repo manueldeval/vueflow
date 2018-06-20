@@ -128,7 +128,6 @@ export default {
                 src.x + v1.x, src.y + v1.y,
                 (dst.x+v2.x),(dst.y+v2.y),
                 dst.x,dst.y)
-                console.log(bezierBox.min.x - border)
       return {
         x : bezierBox.min.x - border,
         y : bezierBox.min.y - border,

@@ -53,7 +53,6 @@ export default {
     },
     onDragged(e) {
       let { el, deltaX, deltaY, offsetX, offsetY, clientX, clientY, first, last } = e
-      //console.log(e)
       if (first || last) 
         this.$emit('dragged',this.id,0,0)
       else
