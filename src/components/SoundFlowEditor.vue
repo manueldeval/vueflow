@@ -2,7 +2,11 @@
   <flow-editor 
           :nodes="nodes"
           :edges="edges"
-          @boxDragged="boxDragged">
+          @boxdragged="boxDragged"
+          @deleteConnector="deleteConnector"
+          @slotclicked="slotclicked"
+          @deletenode="deletenode"
+          >
   </flow-editor>
 </template>
 
@@ -20,12 +24,21 @@ export default {
       count: 0
     }
   },
-  computed: mapState(['edges','nodes']),
+  computed: {
+    ... mapState(['edges','nodes']),
+  },
   methods: {
     boxDragged(id,top,left){
-      let node = this.nodes.find(node => node.id==id)
-      node.top = top
-      node.left = left
+      this.$store.commit('boxDragged',{id,top,left})
+    },
+    slotclicked(nodeId,slotId){
+      this.$store.commit('slotSelected',{nodeId,slotId})
+    },
+    deleteConnector(edgeId){
+      this.$store.commit('deleteConnector',{edgeId})
+    },
+    deletenode(nodeId){
+      this.$store.commit('deleteNode',{nodeId})
     }
   }
 }

@@ -7,14 +7,21 @@
                         :key="item.id" 
                         :location="loc" 
                         :offset="10+20*idx" 
-                        v-bind="item">
+                        v-bind="item"
+                        @slotclicked="slotclicked"
+                        >
             </component>
           </template>
         </template>
       <div style="margin:0px">
           <div class="header" v-dragit="onDragged">
-            {{id}}
+            {{displayName}}
+            <div style="display:inline">
             <icon name="arrows-alt" scale="0.7" style="float:right;padding:4px"></icon>
+            </div>
+            <div style="display:inline" @dblclick="dblclick">
+            <icon name="eraser"  scale="0.7" style="float:right;padding:4px"></icon>
+            </div>
           </div>
       </div>
   </div>
@@ -26,17 +33,26 @@
   export default {
     extends: FlowBox,
     props: {
+      name: {
+        type: String,
+        default: null
+      },
       slots: {
         type: Array,
         required: false,
         default: function(){
           return [
-            { id:'in1' , location:"up", direction:"in", type:"flow-slot" },
-            { id:'in2' , location:"up", direction:"in", type:"flow-slot" },
-            { id:'out1' , location:"down", direction:"out", type:"flow-slot" },
-            { id:'out2' , location:"down", direction:"out", type:"flow-slot" }
+            { id:'in1' ,  location:"up",    direction:"in",   type:"flow-slot" },
+            { id:'in2' ,  location:"up",    direction:"in",   type:"flow-slot" },
+            { id:'out1' , location:"down",  direction:"out",  type:"flow-slot" },
+            { id:'out2' , location:"down",  direction:"out",  type:"flow-slot" }
           ]
         }
+      }
+    },
+    computed: {
+      displayName(){
+        return this.name || this.id
       }
     },
     methods: {
@@ -57,6 +73,13 @@
       },
       getInputConnectorPosition : function(connectorName) {
         return this._getConnectorPosition(connectorName)
+      },
+      slotclicked: function(slotId){
+        this.$emit('slotclicked',this.id,slotId)
+      },
+      dblclick: function(){
+        console.log(this.id)
+        this.$emit('deletenode',this.id)
       }
     },
     components: {

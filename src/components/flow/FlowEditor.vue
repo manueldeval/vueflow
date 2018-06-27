@@ -16,9 +16,12 @@
             :is="item.type" 
             :key="item.id" 
             v-bind="item"
-            :left="item.left+left"
-            :top="item.top+top"
-            @dragged="positionChanged">
+            :left="(item.left+left)"
+            :top="(item.top+top)"
+            @dragged="positionChanged"
+            @slotclicked="slotclicked"
+            @deletenode="deletenode"
+            >
           </component>
         </template> 
 
@@ -26,6 +29,7 @@
           <component 
             :is="item.type" 
             :key="item.id" 
+            @dblclick="deleteConnector"
             v-bind="item">
           </component>
         </template>
@@ -116,6 +120,15 @@ export default {
       if (first || last) return
       this.top = this.top + deltaY / this.scale
       this.left = this.left + deltaX / this.scale
+    },
+    slotclicked: function(nodeId,slotId){
+      this.$emit('slotclicked',nodeId,slotId)
+    },
+    deleteConnector: function(edgeId){
+      this.$emit('deleteConnector',edgeId)
+    },
+    deletenode: function(nodeId){
+      this.$emit('deletenode',nodeId)
     }
   }
 }

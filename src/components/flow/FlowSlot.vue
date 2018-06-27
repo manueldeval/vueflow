@@ -1,5 +1,9 @@
 <template>
-  <div :class="['slot','slot-'+location]" :style="style"></div>
+  <div 
+    :class="['slot','slot-'+location]" 
+    :style="style"
+    @click="toto"
+  ></div>
 </template>
 <script>
   export default {
@@ -25,6 +29,11 @@
           case "left":  return {top: this.offset+"px"}
           case "right": return {top: this.offset+"px"}
         }
+      }
+    },
+    methods: {
+      toto(){
+        this.$emit('slotclicked',this.id)
       }
     }
   }

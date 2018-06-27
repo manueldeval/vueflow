@@ -12,7 +12,7 @@
           :height="connector.height"
           :viewBox="Math.round(connector.x)+' '+Math.round(connector.y)+' '+Math.round(connector.width)+' '+Math.round(connector.height)"
           >
-      <path ref="path" :d="connector.path"/>
+      <path ref="path" :d="connector.path" @dblclick="dblclick"/>
     </svg>
   </div>
 </template>
@@ -20,6 +20,11 @@
 <style lang="scss" scoped>
   path {
     stroke:#d0d0d0;
+    stroke-width:2;
+    fill-opacity:0;
+  }
+  path:hover {
+    stroke:#03fc0f;
     stroke-width:2;
     fill-opacity:0;
   }
@@ -54,6 +59,9 @@ export default {
         case 'down' : return {x:0, y:vectorScale}
         default: return "0,0"
       }
+    },
+    dblclick: function(){
+      this.$emit("dblclick",this.id)
     },
     //(x0,y0) is start point; (x1,y1),(x2,y2) is control points; (x3,y3) is end point.
     bezierMinMax : function (x0, y0, x1, y1, x2, y2, x3, y3) {
